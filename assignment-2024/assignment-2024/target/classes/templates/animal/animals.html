@@ -6,18 +6,20 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Students</title>
+  <title>Animals</title>
 </head>
 <body>
 <div layout:fragment="main-content">
-  <div th:if="${ not#lists.isEmpty(animal)}">
+  <div th:if="${ not#lists.isEmpty(animals)}">
     <table class="table">
       <thead>
       <tr>
         <th>Name</th>
         <th>Type</th>
         <th>Age</th>
-        <!--<th>Actions</th>-->
+        <th>Description</th>
+        <th>Adoption Status</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -25,7 +27,12 @@
         <td th:text="${animal.name}"></td>
         <td th:text="${animal.type}"></td>
         <td th:text="${animal.age}"></td>
-        <td> <a th:href="@{'/animal/' + ${animal.id}}">Details</a></td>
+        <td th:text="${animal.description}"></td>
+        <td th:text="${animal.isAdopted ? 'Adopted' : 'Available'}"></td>
+        <td>
+            <a th:href="@{'/animal/' + ${animal.id}}" class="btn btn-info btn-sm">Details</a>
+            <a th:href="@{'/animal/edit/' + ${animal.id}}" class="btn btn-primary btn-sm">Edit</a>
+        </td>
       </tr>
       </tbody>
     </table>

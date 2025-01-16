@@ -2,40 +2,56 @@ package ds.assignment_2024.controllers;
 
 import ds.assignment_2024.entities.Animal;
 import ds.assignment_2024.service.AnimalService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("animal") 
+@RequestMapping("/animal")
 public class AnimalController {
     
-    AnimalService animalService;
+    @Autowired
+    private AnimalService animalService;
 
     @GetMapping("")
-    public String showAnimals(Model model){
+    public String showAnimals(Model model) {
         model.addAttribute("animals", animalService.getAnimals());
         return "animal/animals";
     }
 
     @GetMapping("/{id}")
-    public String showAnimal(@PathVariable Integer id, Model model){
-        model.addAttribute("animals", animalService.getAnimal(id));
-        return "animal/animals";
+    public String showAnimal(@PathVariable Integer id, Model model) {
+        Animal animal = animalService.getAnimal(id);
+        model.addAttribute("animal", animal);
+        return "animal/animal";
     }
 
     @GetMapping("/new")
-    public String addAnimal(Model model){
-        Animal animal = new Animal();
-        model.addAttribute("animal", animal);
-        return "animal/animals";
+    public String showNewAnimalForm(Model model) {
+        model.addAttribute("animal", new Animal());
+        return "animal/animal";
     }
 
     @PostMapping("/new")
-    public String saveAnimal(@ModelAttribute("animal") Animal animal, Model model) {
+    public String saveAnimal(@ModelAttribute("animal") Animal animal) {
         animalService.saveAnimal(animal);
-        model.addAttribute("animal", animalService.getAnimals());
-        return "animal/animals";
+        return "redirect:/animal";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Animal animal = animalService.getAnimal(id);
+        model.addAttribute("animal", animal);
+        return "animal/animal";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateAnimal(@PathVariable Integer id, @ModelAttribute Animal animal) {
+        animal.setId(id);
+        animalService.saveAnimal(animal);
+        return "redirect:/animal";
     }
 
 }
