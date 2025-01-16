@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Student</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+<form action="#" th:action="@{/animal/new}" th:object="${animal}"
+      method="post">
+
+  <div class="form-group">
+    <label for="id">Id</label>
+    <input type="text" id="id" class="form-control" th:field="*{id}">
+  </div>
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" id="name" class="form-control" th:field="*{name}">
+  </div>
+
+  <div class="form-group">
+    <label for="type">Type</label>
+    <input type="text" id="type" class="form-control" th:field="*{type}">
+  </div>
+
+  <div class="form-group">
+    <label for="age">Age</label>
+    <input type="integer" id="age" class="form-control" th:field="*{age}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+</body>
+</html>

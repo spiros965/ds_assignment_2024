@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Students</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <div th:if="${ not#lists.isEmpty(animal)}">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Age</th>
+        <!--<th>Actions</th>-->
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="animal : ${animals}">
+        <td th:text="${animal.name}"></td>
+        <td th:text="${animal.type}"></td>
+        <td th:text="${animal.age}"></td>
+        <td> <a th:href="@{'/animal/' + ${animal.id}}">Details</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${ #lists.isEmpty(animals)}">
+    No Animals found!
+  </div>
+  <a href="/animal/new" class="btn btn-primary" role="button">Create new Animal</a>
+</div>
+</body>
+</html>
