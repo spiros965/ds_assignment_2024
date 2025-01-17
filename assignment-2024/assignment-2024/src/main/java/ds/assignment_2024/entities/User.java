@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false, unique = true)
@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<AdoptionRequest> adoptionRequests = new ArrayList<>();
 
     // Constructors
