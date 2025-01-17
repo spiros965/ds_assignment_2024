@@ -1,9 +1,10 @@
 package ds.assignment_2024.entities;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "adoption_requests")
+@Table(name = "adoption_request")
 public class AdoptionRequest {
 
     @Id
@@ -11,21 +12,42 @@ public class AdoptionRequest {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // The user who made the request
+    @JoinColumn(name = "animal_id", nullable = false)
+    private Animal animal;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true) // Make user nullable
+    private User user;
 
     @Column(nullable = false)
-    private String animalName; // The animal's name or ID being requested
+    private String name;
 
     @Column(nullable = false)
-    private Boolean status; // PENDING, APPROVED, DENIED
+    private String email;
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column
+    private String message;
+
+    @Column(name = "request_date")
+    private LocalDateTime requestDate;
+
+    @Column
+    private String status;
 
     // Constructors
     public AdoptionRequest() {}
 
-    public AdoptionRequest(User user, String animalName, Boolean status) {
+    public AdoptionRequest(Animal animal, User user, String name, String email, String phone, String message, LocalDateTime requestDate, String status) {
+        this.animal = animal;
         this.user = user;
-        this.animalName = animalName;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.message = message;
+        this.requestDate = requestDate;
         this.status = status;
     }
 
@@ -38,6 +60,14 @@ public class AdoptionRequest {
         this.id = id;
     }
 
+    public Animal getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
     public User getUser() {
         return user;
     }
@@ -46,19 +76,51 @@ public class AdoptionRequest {
         this.user = user;
     }
 
-    public String getAnimalName() {
-        return animalName;
+    public String getName() {
+        return name;
     }
 
-    public void setAnimalName(String animalName) {
-        this.animalName = animalName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Boolean getStatus() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public LocalDateTime getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(LocalDateTime requestDate) {
+        this.requestDate = requestDate;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

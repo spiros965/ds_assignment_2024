@@ -26,7 +26,7 @@ public class UserController {
 
     // Get a specific user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
@@ -40,14 +40,14 @@ public class UserController {
 
     // Update a user's role (Admin-only access)
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUserRole(@PathVariable Long id, @RequestParam String role) {
+    public ResponseEntity<User> updateUserRole(@PathVariable Integer id, @RequestParam String role) {
         User updatedUser = userService.updateUserRole(id, role);
         return ResponseEntity.ok(updatedUser);
     }
 
     // Delete a user (Admin-only access)
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully!");
     }

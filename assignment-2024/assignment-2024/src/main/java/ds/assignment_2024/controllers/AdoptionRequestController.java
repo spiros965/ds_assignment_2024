@@ -2,54 +2,52 @@ package ds.assignment_2024.controllers;
 
 import ds.assignment_2024.entities.AdoptionRequest;
 import ds.assignment_2024.service.AdoptionRequestService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/adoptions")
 public class AdoptionRequestController {
 
     private final AdoptionRequestService adoptionRequestService;
 
-    // Constructor-based injection
     public AdoptionRequestController(AdoptionRequestService adoptionRequestService) {
         this.adoptionRequestService = adoptionRequestService;
     }
 
-    // Get all adoption requests (Admin-only access)
     @GetMapping
-    public List<AdoptionRequest> getAllRequests() {
-        return adoptionRequestService.getAllRequests();
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getAllRequests(Model model) {
+        model.addAttribute("requests", adoptionRequestService.getAllRequests());
+        return "adoption/requests";
     }
 
-    // Submit a new adoption request (User access)
     @PostMapping
-    public ResponseEntity<AdoptionRequest> submitRequest(@RequestBody AdoptionRequest request) {
-        AdoptionRequest submittedRequest = adoptionRequestService.submitRequest(request);
-        return ResponseEntity.ok(submittedRequest);
+    public String submitRequest(@ModelAttribute AdoptionRequest request) {
+        adoptionRequestService.saveRequest(request);
+        return "redirect:/animal/" + request.getAnimal().getId();
     }
 
-    // Update the status of an adoption request (Admin-only access)
-    @PutMapping("/{id}")
-    public ResponseEntity<AdoptionRequest> updateRequestStatus(
-            @PathVariable Long id,
-            @RequestParam boolean status) {
-        AdoptionRequest updatedRequest = adoptionRequestService.updateRequestStatus(id, status);
-        return ResponseEntity.ok(updatedRequest);
+    @PostMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String updateRequestStatus(@PathVariable Integer id, @RequestParam String status) {
+        adoptionRequestService.updateRequestStatus(id, status);
+        return "redirect:/adoptions";
     }
 
-    // Get requests by a specific user (Admin-only access)
-    @GetMapping("/user/{userId}")
-    public List<AdoptionRequest> getRequestsByUser(@PathVariable Long userId) {
-        return adoptionRequestService.getRequestsByUser(userId);
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getRequest(@PathVariable Integer id, Model model) {
+        model.addAttribute("request", adoptionRequestService.getRequest(id));
+        return "adoption/request-details";
     }
 
-    // Delete an adoption request (Admin-only access)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRequest(@PathVariable Long id) {
+    @PostMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteRequest(@PathVariable Integer id) {
         adoptionRequestService.deleteRequest(id);
-        return ResponseEntity.ok("Adoption request deleted successfully!");
+        return "redirect:/adoptions";
     }
 }
