@@ -25,7 +25,7 @@ public class Animal {
     @Column 
     private Boolean isAdopted;
 
-    // Constructors
+    
     public Animal() {
     }
 

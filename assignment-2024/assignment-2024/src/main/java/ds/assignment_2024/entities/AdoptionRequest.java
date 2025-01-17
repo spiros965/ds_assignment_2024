@@ -16,7 +16,7 @@ public class AdoptionRequest {
     private Animal animal;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true) // Make user nullable
+    @JoinColumn(name = "user_id", nullable = true) 
     private User user;
 
     @Column(nullable = false)
@@ -37,7 +37,7 @@ public class AdoptionRequest {
     @Column
     private String status;
 
-    // Constructors
+    
     public AdoptionRequest() {}
 
     public AdoptionRequest(Animal animal, User user, String name, String email, String phone, String message, LocalDateTime requestDate, String status) {

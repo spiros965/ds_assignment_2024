@@ -9,7 +9,7 @@
 
 <body>
     <div layout:fragment="main-content">
-        <!-- Fix: Separate URL generation from conditional -->
+        
         <form th:action="@{${animal.id != null ? '/animal/edit/' + animal.id : '/animal/new'}}" 
               th:object="${animal}" 
               method="post">
