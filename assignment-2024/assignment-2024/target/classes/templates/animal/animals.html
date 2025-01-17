@@ -31,7 +31,8 @@
         <td th:text="${animal.isAdopted ? 'Adopted' : 'Available'}"></td>
         <td>
             <a th:href="@{'/animal/' + ${animal.id}}" class="btn btn-info btn-sm">Details</a>
-            <a th:href="@{'/animal/edit/' + ${animal.id}}" class="btn btn-primary btn-sm">Edit</a>
+            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{'/animal/edit/' + ${animal.id}}" class="btn btn-primary btn-sm">Edit</a>
+            <!--<a th:href="@{'/animal/edit/' + ${animal.id}}" class="btn btn-primary btn-sm">Edit</a>-->
         </td>
       </tr>
       </tbody>
@@ -40,7 +41,10 @@
   <div th:if="${ #lists.isEmpty(animals)}">
     No Animals found!
   </div>
-  <a href="/animal/new" class="btn btn-primary" role="button">Create new Animal</a>
+  <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+    <a href="/animal/new" class="btn btn-primary" role="button">Create New Animal</a>
+  </div>
+  
 </div>
 </body>
 </html>

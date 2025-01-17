@@ -25,7 +25,7 @@ public class AnimalController {
     public String showAnimal(@PathVariable Integer id, Model model) {
         Animal animal = animalService.getAnimal(id);
         model.addAttribute("animal", animal);
-        return "animal/animal";
+        return "animal/animal-details"; // Separate template for details
     }
 
     @GetMapping("/new")

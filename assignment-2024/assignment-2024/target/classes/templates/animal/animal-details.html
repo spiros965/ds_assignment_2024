@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Animal Details</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h2>Animal Details</h2>
+    <div>
+        <label>ID:</label>
+        <span th:text="${animal.id}"></span>
+    </div>
+    <div>
+        <label>Name:</label>
+        <span th:text="${animal.name}"></span>
+    </div>
+    <div>
+        <label>Type:</label>
+        <span th:text="${animal.type}"></span>
+    </div>
+    <div>
+        <label>Age:</label>
+        <span th:text="${animal.age}"></span>
+    </div>
+    <div>
+        <label>Description:</label>
+        <span th:text="${animal.description}"></span>
+    </div>
+    <div>
+        <label>Adoption Status:</label>
+        <span th:text="${animal.isAdopted ? 'Adopted' : 'Available'}"></span>
+    </div>
+    <a href="/animal" class="btn btn-secondary">Back to List</a>
+</div>
+</body>
+</html>
