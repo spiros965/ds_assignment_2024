@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${animal.id != null ? 'Edit Animal' : 'New Animal'}">Animal</title>
+</head>
+
+<body>
+    <div layout:fragment="main-content">
+        <!-- Fix: Separate URL generation from conditional -->
+        <form th:action="@{${animal.id != null ? '/animal/edit/' + animal.id : '/animal/new'}}" 
+              th:object="${animal}" 
+              method="post">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" th:field="*{name}">
+            </div>
+
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input type="text" id="type" class="form-control" th:field="*{type}">
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" class="form-control" th:field="*{age}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" class="form-control" th:field="*{description}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="isAdopted">Adoption Status</label>
+                <select id="isAdopted" class="form-control" th:field="*{isAdopted}">
+                    <option value="true">Adopted</option>
+                    <option value="false">Available</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="/animal" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+
+</html>

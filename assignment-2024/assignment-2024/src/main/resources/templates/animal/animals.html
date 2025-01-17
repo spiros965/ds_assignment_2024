@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Animals</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+  <div th:if="${ not#lists.isEmpty(animals)}">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Age</th>
+        <th>Description</th>
+        <th>Adoption Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="animal : ${animals}">
+        <td th:text="${animal.name}"></td>
+        <td th:text="${animal.type}"></td>
+        <td th:text="${animal.age}"></td>
+        <td th:text="${animal.description}"></td>
+        <td th:text="${animal.isAdopted ? 'Adopted' : 'Available'}"></td>
+        <td>
+            <a th:href="@{'/animal/' + ${animal.id}}" class="btn btn-info btn-sm">Details</a>
+            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{'/animal/edit/' + ${animal.id}}" class="btn btn-primary btn-sm">Edit</a>
+            <!--<a th:href="@{'/animal/edit/' + ${animal.id}}" class="btn btn-primary btn-sm">Edit</a>-->
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${ #lists.isEmpty(animals)}">
+    No Animals found!
+  </div>
+  <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+    <a href="/animal/new" class="btn btn-primary" role="button">Create New Animal</a>
+  </div>
+  
+</div>
+</body>
+</html>
