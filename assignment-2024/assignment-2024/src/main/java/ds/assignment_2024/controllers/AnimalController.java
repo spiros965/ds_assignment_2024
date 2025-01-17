@@ -54,4 +54,10 @@ public class AnimalController {
         return "redirect:/animal";
     }
 
+    @GetMapping("/{id}/adopt")
+    public String showAdoptionForm(@PathVariable Integer id, Model model) {
+        Animal animal = animalService.getAnimal(id);
+        model.addAttribute("animal", animal);
+        return "animal/adoption-request";
+    }
 }

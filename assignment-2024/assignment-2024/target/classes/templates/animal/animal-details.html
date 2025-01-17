@@ -33,6 +33,7 @@
         <label>Adoption Status:</label>
         <span th:text="${animal.isAdopted ? 'Adopted' : 'Available'}"></span>
     </div>
+    <a th:if="${!animal.isAdopted}" th:href="@{'/animal/' + ${animal.id} + '/adopt'}" class="btn btn-primary">Adoption Request</a>
     <a href="/animal" class="btn btn-secondary">Back to List</a>
 </div>
 </body>
