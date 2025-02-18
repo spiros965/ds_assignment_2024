@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/adoptions")
 public class AdoptionRequestController {
@@ -55,5 +57,13 @@ public class AdoptionRequestController {
     public String deleteRequest(@PathVariable Integer id) {
         adoptionRequestService.deleteRequest(id);
         return "redirect:/adoptions";
+    }
+
+    @GetMapping("/my-requests")
+    public String getMyRequests(Model model) {
+        Integer userId = userService.getCurrentUserId();
+        List<AdoptionRequest> requests = adoptionRequestService.getRequestsByUserId(userId);
+        model.addAttribute("requests", requests);
+        return "adoptions/my-adoptions";  // Updated template path
     }
 }

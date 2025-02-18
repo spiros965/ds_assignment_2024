@@ -56,4 +56,9 @@ public class AdoptionRequestService {
         return adoptionRequestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Adoption request not found with id: " + id));
     }
+
+    @Transactional
+    public List<AdoptionRequest> getRequestsByUserId(Integer userId) {
+        return adoptionRequestRepository.findByUserId(userId);
+    }
 }
