@@ -21,6 +21,10 @@
             </a>
             <a sec:authorize="!isAuthenticated()"  class="nav-link">
                 <a  class="btn btn-primary" href="/login">Login</a>
+            </a>
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/adoptions/my-requests}" class="btn btn-primary">My Adoption Requests</a>
+         
         </nav>
     </div>
 </header>

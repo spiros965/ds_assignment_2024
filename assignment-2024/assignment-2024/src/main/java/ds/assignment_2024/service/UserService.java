@@ -3,15 +3,18 @@ package ds.assignment_2024.service;
 import ds.assignment_2024.entities.User;
 import ds.assignment_2024.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+ import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 
 @Service
+@SessionScope
 public class UserService {
 
     private final UserRepository userRepository;
+    private Integer currentUserId;
+    private String currentUsername;
 
-   
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -45,5 +48,23 @@ public class UserService {
             throw new RuntimeException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    public void setCurrentUser(Integer userId, String username) {
+        this.currentUserId = userId;
+        this.currentUsername = username;
+    }
+
+    public Integer getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    public void clear() {
+        this.currentUserId = null;
+        this.currentUsername = null;
     }
 }

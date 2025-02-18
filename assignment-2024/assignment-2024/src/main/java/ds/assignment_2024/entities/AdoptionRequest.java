@@ -16,7 +16,7 @@ public class AdoptionRequest {
     private Animal animal;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true) 
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
