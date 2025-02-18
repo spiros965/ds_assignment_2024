@@ -62,8 +62,44 @@ public class AdoptionRequestController {
     @GetMapping("/my-requests")
     public String getMyRequests(Model model) {
         Integer userId = userService.getCurrentUserId();
-        List<AdoptionRequest> requests = adoptionRequestService.getRequestsByUserId(userId);
-        model.addAttribute("requests", requests);
-        return "adoptions/my-adoptions";  // Updated template path
+        if (userService.isAdmin(userId)) {
+            List<AdoptionRequest> pendingRequests = adoptionRequestService.getRequestsByStatus("PENDING");
+            List<AdoptionRequest> acceptedRequests = adoptionRequestService.getRequestsByStatus("ACCEPTED");
+            List<AdoptionRequest> deniedRequests = adoptionRequestService.getRequestsByStatus("DENIED");
+            model.addAttribute("pendingRequests", pendingRequests);
+            model.addAttribute("acceptedRequests", acceptedRequests);
+            model.addAttribute("deniedRequests", deniedRequests);
+            return "adoptions/admin-requests";
+        } else {
+            List<AdoptionRequest> requests = adoptionRequestService.getRequestsByUserId(userId);
+            model.addAttribute("requests", requests);
+            return "adoptions/my-adoptions";
+        }
+    }
+
+    @GetMapping("/admin-requests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getAllRequestsForAdmin(Model model) {
+        List<AdoptionRequest> pendingRequests = adoptionRequestService.getRequestsByStatus("PENDING");
+        List<AdoptionRequest> acceptedRequests = adoptionRequestService.getRequestsByStatus("ACCEPTED");
+        List<AdoptionRequest> deniedRequests = adoptionRequestService.getRequestsByStatus("DENIED");
+        model.addAttribute("pendingRequests", pendingRequests);
+        model.addAttribute("acceptedRequests", acceptedRequests);
+        model.addAttribute("deniedRequests", deniedRequests);
+        return "adoptions/admin-requests";
+    }
+    
+    @PostMapping("/{id}/accept")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String acceptRequest(@PathVariable Integer id) {
+        adoptionRequestService.updateRequestStatus(id, "ACCEPTED");
+        return "redirect:/adoptions/admin-requests";
+    }
+    
+    @PostMapping("/{id}/deny")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String denyRequest(@PathVariable Integer id) {
+        adoptionRequestService.updateRequestStatus(id, "DENIED");
+        return "redirect:/adoptions/admin-requests";
     }
 }

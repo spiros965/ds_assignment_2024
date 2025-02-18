@@ -14,17 +14,20 @@
         <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link active" href="/">Home</a>
             <a class="nav-link" href="/animal">Animals</a>
-            <a sec:authorize="isAuthenticated()"  class="nav-link">
+            <a sec:authorize="isAuthenticated()" class="nav-link">
                 <form th:action="@{/logout}" method="post">
-                    <input type="submit"  class="btn btn-primary" value="Sign Out"/>
+                    <input type="submit" class="btn btn-primary" value="Sign Out"/>
                 </form>
             </a>
-            <a sec:authorize="!isAuthenticated()"  class="nav-link">
-                <a  class="btn btn-primary" href="/login">Login</a>
+            <a sec:authorize="!isAuthenticated()" class="nav-link">
+                <a class="btn btn-primary" href="/login">Login</a>
             </a>
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/adoptions/my-requests}" class="btn btn-primary">My Adoption Requests</a>
-         
+                <!-- Conditional link for admins -->
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/adoptions/admin-requests}" class="btn btn-primary">Request Handling</a>
+                <!-- Conditional link for regular users -->
+                <a th:if="${#authorization.expression('!hasRole(''ADMIN'')')}" th:href="@{/adoptions/my-requests}" class="btn btn-primary">My Adoption Requests</a>
+            </div>
         </nav>
     </div>
 </header>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Adoption Requests</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h2>All Adoption Requests</h2>
+    
+    <h3>Pending Requests</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Animal Name</th>
+                    <th>Request Date</th>
+                    <th>User Name</th>
+                    <th>User Email</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${pendingRequests}">
+                    <td th:text="${request.animal.name}"></td>
+                    <td th:text="${#temporals.format(request.requestDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${request.user.username}"></td>
+                    <td th:text="${request.email}"></td>
+                    <td th:text="${request.status}"></td>
+                    <td th:text="${request.message}"></td>
+                    <td>
+                        <form th:action="@{/adoptions/{id}/accept(id=${request.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <form th:action="@{/adoptions/{id}/deny(id=${request.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Accepted Requests</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Animal Name</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${acceptedRequests}">
+                    <td th:text="${request.animal.name}"></td>
+                    <td th:text="${#temporals.format(request.requestDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${request.status}"></td>
+                    <td th:text="${request.message}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Denied Requests</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Animal Name</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${deniedRequests}">
+                    <td th:text="${request.animal.name}"></td>
+                    <td th:text="${#temporals.format(request.requestDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${request.status}"></td>
+                    <td th:text="${request.message}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

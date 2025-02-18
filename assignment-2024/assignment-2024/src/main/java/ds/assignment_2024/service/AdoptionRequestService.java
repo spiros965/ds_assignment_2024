@@ -61,4 +61,13 @@ public class AdoptionRequestService {
     public List<AdoptionRequest> getRequestsByUserId(Integer userId) {
         return adoptionRequestRepository.findByUserId(userId);
     }
+
+    
+
+    
+    public List<AdoptionRequest> getRequestsByStatus(String status) {
+        return adoptionRequestRepository.findByStatus(status);
+    }
+
+    
 }

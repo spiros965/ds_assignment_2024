@@ -67,4 +67,15 @@ public class UserService {
         this.currentUserId = null;
         this.currentUsername = null;
     }
+
+    public boolean isAdmin(Integer userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            return user.getRole().equals("ROLE_ADMIN");        }
+        return false;
+    }
+
+
+
+
 }

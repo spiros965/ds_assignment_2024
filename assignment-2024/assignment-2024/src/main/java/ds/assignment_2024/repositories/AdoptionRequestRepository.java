@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest, Integer> {
     List<AdoptionRequest> findByUserId(Integer userId);
+    List<AdoptionRequest> findByStatus(String status);
 }
