@@ -2,6 +2,8 @@ package ds.assignment_2024.controllers;
 
 import ds.assignment_2024.entities.AdoptionRequest;
 import ds.assignment_2024.service.AdoptionRequestService;
+import ds.assignment_2024.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public class AdoptionRequestController {
 
     private final AdoptionRequestService adoptionRequestService;
+
+    @Autowired
+    private UserService userService;
 
     public AdoptionRequestController(AdoptionRequestService adoptionRequestService) {
         this.adoptionRequestService = adoptionRequestService;
@@ -26,7 +31,8 @@ public class AdoptionRequestController {
 
     @PostMapping
     public String submitRequest(@ModelAttribute AdoptionRequest request) {
-        adoptionRequestService.saveRequest(request);
+        Integer userId = userService.getCurrentUserId();
+        adoptionRequestService.saveRequest(request, userId);
         return "redirect:/animal/" + request.getAnimal().getId();
     }
 

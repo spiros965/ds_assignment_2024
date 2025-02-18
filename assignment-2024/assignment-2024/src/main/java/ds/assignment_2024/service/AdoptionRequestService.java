@@ -1,7 +1,9 @@
 package ds.assignment_2024.service;
 
 import ds.assignment_2024.entities.AdoptionRequest;
+import ds.assignment_2024.entities.User;  // Add this import
 import ds.assignment_2024.repositories.AdoptionRequestRepository;
+import ds.assignment_2024.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
@@ -11,15 +13,21 @@ import java.util.List;
 @Service
 public class AdoptionRequestService {
     private final AdoptionRequestRepository adoptionRequestRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AdoptionRequestService(AdoptionRequestRepository adoptionRequestRepository) {
+    public AdoptionRequestService(AdoptionRequestRepository adoptionRequestRepository, 
+                                UserRepository userRepository) {
         this.adoptionRequestRepository = adoptionRequestRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public AdoptionRequest saveRequest(AdoptionRequest request) {
-        return adoptionRequestRepository.save(request);
+    public void saveRequest(AdoptionRequest request, Integer userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        request.setUser(user);
+        adoptionRequestRepository.save(request);
     }
 
     @Transactional

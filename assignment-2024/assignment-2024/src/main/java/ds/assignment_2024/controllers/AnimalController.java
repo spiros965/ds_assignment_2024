@@ -3,6 +3,7 @@ package ds.assignment_2024.controllers;
 import ds.assignment_2024.entities.Animal;
 import ds.assignment_2024.service.AnimalService;
 import ds.assignment_2024.service.AdoptionRequestService;
+import ds.assignment_2024.service.UserService;  // Add this line
 import ds.assignment_2024.entities.AdoptionRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class AnimalController {
 
     @Autowired
     private AdoptionRequestService adoptionRequestService;
+
+    @Autowired
+    private UserService userService;  // Add this line
 
     @GetMapping("")
     public String showAnimals(Model model) {
@@ -75,6 +79,7 @@ public class AnimalController {
                                       @RequestParam String phone,
                                       @RequestParam String message) {
         Animal animal = animalService.getAnimal(id);
+        Integer userId = userService.getCurrentUserId();  // Get current user ID
         
         AdoptionRequest request = new AdoptionRequest();
         request.setAnimal(animal);
@@ -85,7 +90,7 @@ public class AnimalController {
         request.setRequestDate(LocalDateTime.now());
         request.setStatus("PENDING");
         
-        adoptionRequestService.saveRequest(request);
+        adoptionRequestService.saveRequest(request, userId);  // Pass userId as second argument
         
         return "redirect:/animal/" + id;
     }

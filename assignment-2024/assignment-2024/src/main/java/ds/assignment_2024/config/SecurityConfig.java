@@ -1,6 +1,7 @@
 package ds.assignment_2024.config;
 
 import ds.assignment_2024.repositories.UserRepository;
+import ds.assignment_2024.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,14 +19,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public SecurityConfig(UserRepository userRepository) {
+    public SecurityConfig(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Bean
@@ -42,7 +46,7 @@ public class SecurityConfig {
         return provider;
     }
 
-       @Bean
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
@@ -59,9 +63,13 @@ public class SecurityConfig {
             )
             .formLogin((form) -> form
                 .loginPage("/login")
+                .successHandler(new CustomAuthenticationSuccessHandler(userService))
                 .permitAll()
             )
-            .logout((logout) -> logout.permitAll());
+            .logout((logout) -> logout
+                .permitAll()
+                .addLogoutHandler((request, response, authentication) -> userService.clear())
+            );
 
         return http.build();
     }
