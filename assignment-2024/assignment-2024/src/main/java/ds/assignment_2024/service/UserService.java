@@ -3,7 +3,9 @@ package ds.assignment_2024.service;
 import ds.assignment_2024.entities.User;
 import ds.assignment_2024.repositories.UserRepository;
 import org.springframework.stereotype.Service;
- import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -12,11 +14,13 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private Integer currentUserId;
     private String currentUsername;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Get all users
@@ -75,7 +79,17 @@ public class UserService {
         return false;
     }
 
-
-
-
+    @Transactional
+    public void registerUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
+        
+        // Encode password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 }
