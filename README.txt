@@ -9,7 +9,7 @@ Use Swagger UI to test the APIs.
 
 To login as user
     username : user
-    password : password
+    password : user
 As admin
     username : admin
     password : admin
