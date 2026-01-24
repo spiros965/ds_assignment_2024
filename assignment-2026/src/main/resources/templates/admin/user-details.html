@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'User Details: ' + user.username}">User Details</title>
+</head>
+
+<body>
+    <div layout:fragment="main-content">
+        <h1>User Details</h1>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">General Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">ID:</dt>
+                            <dd class="col-sm-8" th:text="${user.id}"></dd>
+
+                            <dt class="col-sm-4">Username:</dt>
+                            <dd class="col-sm-8" th:text="${user.username}"></dd>
+
+                            <dt class="col-sm-4">Email:</dt>
+                            <dd class="col-sm-8" th:text="${user.email}"></dd>
+
+                            <dt class="col-sm-4">Role:</dt>
+                            <dd class="col-sm-8">
+                                <span th:if="${user.role == 'ADMIN'}" class="badge bg-danger">ADMIN</span>
+                                <span th:unless="${user.role == 'ADMIN'}" class="badge bg-secondary">USER</span>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{'/admin/users/' + ${user.id} + '/delete'}" method="post" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                            <button type="submit" class="btn btn-danger">Delete User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Adoption Request History</h2>
+
+        <div th:if="${#lists.isEmpty(adoptionRequests)}" class="alert alert-info">
+            This user has no adoption requests.
+        </div>
+
+        <div th:if="${not #lists.isEmpty(adoptionRequests)}">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Animal</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="request : ${adoptionRequests}">
+                        <td th:text="${request.id}"></td>
+                        <td th:text="${request.animal.name}"></td>
+                        <td th:text="${#temporals.format(request.requestDate, 'dd MMM yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:if="${request.status == 'PENDING'}" class="badge bg-warning">PENDING</span>
+                            <span th:if="${request.status == 'APPROVED'}" class="badge bg-success">APPROVED</span>
+                            <span th:if="${request.status == 'REJECTED'}" class="badge bg-danger">REJECTED</span>
+                        </td>
+                        <td th:text="${request.message}"></td>
+                        <td>
+                            <form th:if="${request.status == 'PENDING'}" th:action="@{'/admin/requests/' + ${request.id} + '/approve'}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form th:if="${request.status == 'PENDING'}" th:action="@{'/admin/requests/' + ${request.id} + '/reject'}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            <a href="/admin/users" class="btn btn-secondary">Back to Users</a>
+            <a href="/animal" class="btn btn-secondary">Back to Animals</a>
+        </div>
+    </div>
+</body>
+
+</html>
