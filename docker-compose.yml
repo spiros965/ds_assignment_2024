@@ -1,31 +1,11 @@
+version: "3.9"
 
 services:
-
-  db:
-    image: postgres:16
-    container_name: ds2024_postgres
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
   app:
     build: .
     container_name: ds2024_app
     restart: always
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
-      SPRING_DATASOURCE_USERNAME: ${DB_USER}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-    depends_on:
-      - db
+    env_file:
+      - .env
     ports:
       - "8080:8080"
-
-volumes:
-  postgres_data:
